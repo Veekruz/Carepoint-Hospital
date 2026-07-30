@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarePoint Clinic — Book an Appointment</title>
+<style>
+  :root{
+    --blue:#1b7fc4;
+    --blue-dark:#0b3a63;
+    --ink:#12202e;
+    --muted:#65788c;
+    --line:#e4ecf3;
+    --bg:#f7fafc;
+    --danger:#c0392b;
+    --success:#1b8a5a;
+    --font:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:var(--font);color:var(--ink);background:#fff;line-height:1.5;}
+  a{color:inherit;text-decoration:none;}
+  h1,h2{margin:0;color:var(--blue-dark);}
+  p{margin:0;}
+  ul{margin:0;padding:0;list-style:none;}
+
+  /* Nav */
+  header.nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 24px;max-width:960px;margin:0 auto;
+  }
+  .logo{font-weight:700;font-size:1.1rem;color:var(--blue-dark);}
+  .logo span{color:var(--blue);}
+  .nav-links{display:flex;gap:24px;align-items:center;}
+  .nav-links a{font-size:0.92rem;font-weight:500;color:var(--muted);}
+  .nav-links a:hover{color:var(--blue);}
+  .btn{
+    display:inline-block;border:none;cursor:pointer;font-weight:600;
+    border-radius:8px;padding:10px 18px;font-size:0.92rem;
+    background:var(--blue);color:#fff;transition:background .15s ease;
+  }
+  .btn:hover{background:var(--blue-dark);}
+
+  /* Sections */
+  main{max-width:640px;margin:0 auto;padding:0 24px;}
+  section{padding:48px 0;border-top:1px solid var(--line);}
+  section:first-of-type{border-top:none;}
+  .section-title{font-size:1.4rem;margin-bottom:8px;}
+  .section-sub{color:var(--muted);font-size:0.95rem;margin-bottom:24px;}
+
+  .about-list{display:flex;flex-direction:column;gap:16px;}
+  .about-list li{display:flex;gap:12px;font-size:0.94rem;color:var(--muted);}
+  .about-list li b{color:var(--ink);font-weight:600;}
+  .about-list li::before{content:"—";color:var(--blue);flex-shrink:0;}
+
+  /* Form */
+  form{display:flex;flex-direction:column;gap:16px;}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:0.85rem;font-weight:600;color:var(--blue-dark);}
+  .field label .opt{color:var(--muted);font-weight:400;}
+  .field input,.field select,.field textarea{
+    font-family:var(--font);font-size:0.95rem;padding:10px 12px;
+    border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);outline:none;
+    transition:border-color .15s ease;
+  }
+  .field textarea{resize:vertical;min-height:80px;}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);}
+  .field input.invalid,.field select.invalid,.field textarea.invalid{border-color:var(--danger);}
+  .field-error{font-size:0.76rem;color:var(--danger);min-height:14px;}
+  .submit{width:100%;padding:13px;font-size:0.98rem;margin-top:4px;}
+  .submit[disabled]{opacity:0.6;cursor:not-allowed;}
+
+  .msg{display:none;border-radius:8px;padding:11px 14px;font-size:0.88rem;font-weight:600;margin-bottom:16px;}
+  .msg.show{display:block;}
+  .msg.success{background:#e9f8f1;color:var(--success);}
+  .msg.error{background:#fdecea;color:var(--danger);}
+
+  .contact-list{display:flex;flex-direction:column;gap:14px;}
+  .contact-list li{display:flex;justify-content:space-between;font-size:0.92rem;padding:10px 0;border-bottom:1px solid var(--line);}
+  .contact-list li:last-child{border-bottom:none;}
+  .contact-list li span:first-child{color:var(--muted);}
+  .contact-list li span:last-child{font-weight:600;color:var(--ink);text-align:right;}
+
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:0.82rem;border-top:1px solid var(--line);}
+
+  @media (max-width:560px){
+    .row{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="logo">Care<span>Point</span></div>
+  <nav class="nav-links">
+    <a href="#about">Why Us</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a href="#appointment" class="btn">Book Now</a>
+</header>
+
+<main>
+
+  <section id="about">
+    <h2 class="section-title">Why patients choose CarePoint</h2>
+    <p class="section-sub">A straightforward booking experience, backed by a clinic that takes your time seriously.</p>
+    <ul class="about-list">
+      <li><span><b>Flexible scheduling</b> — mornings, evenings, and weekend slots available.</span></li>
+      <li><span><b>Experienced physicians</b> — every appointment is reviewed by a licensed clinician.</span></li>
+      <li><span><b>Private &amp; secure</b> — your details are never shared without consent.</span></li>
+    </ul>
+  </section>
+
+  <section id="appointment">
+    <h2 class="section-title">Request an appointment</h2>
+    <p class="section-sub">Fill in your details and we'll confirm your slot by email or phone.</p>
+
+    <div class="msg success" id="successMsg">Your appointment request has been sent. We'll confirm shortly.</div>
+    <div class="msg error" id="errorMsg"><span id="errorText">Something went wrong. Please try again.</span></div>
+
+    <form id="appointmentForm" novalidate>
+      <div class="field">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" name="Full Name" placeholder="Elijah Akpan" required>
+        <span class="field-error" data-error-for="fullName"></span>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="Email" placeholder="elijah@example.com" required>
+          <span class="field-error" data-error-for="email"></span>
+        </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="Phone" placeholder="+234 555 123 4567" required>
+          <span class="field-error" data-error-for="phone"></span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select id="gender" name="Gender" required>
+            <option value="" disabled selected>Select gender</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Other">Other</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+          </select>
+          <span class="field-error" data-error-for="gender"></span>
+        </div>
+        <div class="field">
+          <label for="condition">Medical Condition <span class="opt">(optional)</span></label>
+          <input type="text" id="condition" name="Existing Medical Condition" placeholder="e.g. Diabetes, None">
+          <span class="field-error" data-error-for="condition"></span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="appointmentDate">Appointment Date</label>
+          <input type="date" id="appointmentDate" name="Appointment Date" required>
+          <span class="field-error" data-error-for="appointmentDate"></span>
+        </div>
+        <div class="field">
+          <label for="appointmentTime">Appointment Time</label>
+          <input type="time" id="appointmentTime" name="Appointment Time" required>
+          <span class="field-error" data-error-for="appointmentTime"></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="reason">Reason for Visit</label>
+        <textarea id="reason" name="Reason for Visit" placeholder="Briefly describe why you'd like to see a doctor" required></textarea>
+        <span class="field-error" data-error-for="reason"></span>
+      </div>
+
+      <button type="submit" class="btn submit" id="submitBtn">Book Appointment</button>
+    </form>
+  </section>
+
+  <section id="contact">
+    <h2 class="section-title">Get in touch</h2>
+    <p class="section-sub">Have a question before booking? Reach the front desk directly.</p>
+    <ul class="contact-list">
+      <li><span>Phone</span><span>+234 555 123 4567</span></li>
+      <li><span>Email</span><span>hello@carepointclinic.example</span></li>
+      <li><span>Address</span><span>221 Eket Road, Mkpat Enin, Akwa Ibom State</span></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>© 2026 CarePoint Clinic. All rights reserved.</footer>
+
+<script>
+  const form = document.getElementById('appointmentForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const successMsg = document.getElementById('successMsg');
+  const errorMsg = document.getElementById('errorMsg');
+  const errorText = document.getElementById('errorText');
+
+  // SheetDB endpoint — replace with your own SheetDB.io API URL
+  const SHEETDB_URL = 'https://sheetdb.io/api/v1/xcu12mx64eslz';
+
+  const requiredFields = [
+    { id: 'fullName', message: 'Please enter your full name.' },
+    { id: 'email', message: 'Please enter a valid email address.' },
+    { id: 'phone', message: 'Please enter your phone number.' },
+    { id: 'gender', message: 'Please select a gender.' },
+    { id: 'appointmentDate', message: 'Please choose an appointment date.' },
+    { id: 'appointmentTime', message: 'Please choose an appointment time.' },
+    { id: 'reason', message: 'Please tell us the reason for your visit.' }
+  ];
+
+  function setFieldError(id, message) {
+    const input = document.getElementById(id);
+    const errorEl = document.querySelector(`[data-error-for="${id}"]`);
+    if (message) {
+      input.classList.add('invalid');
+      if (errorEl) errorEl.textContent = message;
+    } else {
+      input.classList.remove('invalid');
+      if (errorEl) errorEl.textContent = '';
+    }
+  }
+
+  function isValidEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); }
+  function isValidPhone(value) { return /^[0-9+()\-\s]{7,}$/.test(value); }
+
+  function validateForm() {
+    let isValid = true;
+    requiredFields.forEach(field => {
+      const input = document.getElementById(field.id);
+      const value = input.value.trim();
+
+      if (!value) { setFieldError(field.id, field.message); isValid = false; return; }
+      if (field.id === 'email' && !isValidEmail(value)) { setFieldError(field.id, 'Please enter a valid email address.'); isValid = false; return; }
+      if (field.id === 'phone' && !isValidPhone(value)) { setFieldError(field.id, 'Please enter a valid phone number.'); isValid = false; return; }
+      setFieldError(field.id, '');
+    });
+    return isValid;
+  }
+
+  requiredFields.forEach(field => {
+    document.getElementById(field.id).addEventListener('input', () => setFieldError(field.id, ''));
+    document.getElementById(field.id).addEventListener('change', () => setFieldError(field.id, ''));
+  });
+
+  function hideMessages() {
+    successMsg.classList.remove('show');
+    errorMsg.classList.remove('show');
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    hideMessages();
+
+    if (!validateForm()) {
+      const firstInvalid = form.querySelector('.invalid');
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
+
+    const payload = {
+      data: [{
+        fullName: document.getElementById('fullName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        gender: document.getElementById('gender').value,
+        appointmentDate: document.getElementById('appointmentDate').value,
+        appointmentTime: document.getElementById('appointmentTime').value,
+        condition: document.getElementById('condition').value.trim() || 'None',
+        reason: document.getElementById('reason').value.trim()
+      }]
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Booking...';
+
+    try {
+      const response = await fetch(SHEETDB_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        let detail = '';
+        try { detail = (await response.json()).error || ''; } catch (_) {}
+        throw new Error(`SheetDB returned ${response.status}${detail ? ': ' + detail : ''}`);
+      }
+
+      successMsg.classList.add('show');
+      form.reset();
+      requiredFields.forEach(field => setFieldError(field.id, ''));
+      successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (err) {
+      console.error('Appointment submit failed:', err);
+      errorText.textContent = err.message.startsWith('SheetDB')
+        ? err.message
+        : 'We could not reach the booking service. Please check your connection and try again.';
+      errorMsg.classList.add('show');
+      errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Book Appointment';
+    }
+  });
+</script>
+
+</body>
+</html>
